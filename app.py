@@ -19,7 +19,7 @@ load_dotenv()
 groq_api_key = os.getenv('GROQ_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HF_TOKEN')
 api_key = os.getenv("GEOAPIFY_API_KEY")
-embeddings = HuggingFaceEmbeddings(model_name = "all-MiniLM-L6-v2", model_kwargs={"device": "cpu"})
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 llm = ChatGroq(groq_api_key=groq_api_key, model="gemma2-9b-it")
 
@@ -176,4 +176,5 @@ if st.session_state["places"]:
             st.markdown(f"**Answer:** {response['answer']}")
         else:
             st.warning("Please click 'Show Top Places' first to initialize the retriever.")
+
  
