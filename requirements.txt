@@ -18,4 +18,5 @@ sentence_transformers
 pypdf
 faiss-cpu
 pymupdf
+torch==1.13.1
 amadeus
