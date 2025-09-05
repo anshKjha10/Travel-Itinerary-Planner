@@ -19,10 +19,12 @@ load_dotenv()
 groq_api_key = os.getenv('GROQ_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HF_TOKEN')
 api_key = os.getenv("GEOAPIFY_API_KEY")
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
+@st.cache_resource
+def get_embeddings():
+    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 llm = ChatGroq(groq_api_key=groq_api_key, model="gemma2-9b-it")
-
 st.set_page_config(page_title="Travel Itinerary Planner Chatbot", page_icon=":airplane:")
 st.title("Travel Itinerary Planner Chatbot")
 
@@ -75,6 +77,7 @@ def get_top_popular_places(city, country, limit=10):
     return top_places
 
 def embded_places_and_create_retriever(places_list):
+    embeddings = get_embeddings()
     docs = [Document(page_content=place) for place in places_list]
     vector_store = FAISS.from_documents(docs, embeddings)
     return vector_store.as_retriever()
@@ -176,5 +179,3 @@ if st.session_state["places"]:
             st.markdown(f"**Answer:** {response['answer']}")
         else:
             st.warning("Please click 'Show Top Places' first to initialize the retriever.")
-
- 
