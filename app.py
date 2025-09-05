@@ -22,7 +22,11 @@ api_key = os.getenv("GEOAPIFY_API_KEY")
 
 @st.cache_resource
 def get_embeddings():
-    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    return HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        model_kwargs={"device": "cpu"},
+        encode_kwargs={"normalize_embeddings": True}
+    )
 
 llm = ChatGroq(groq_api_key=groq_api_key, model="gemma2-9b-it")
 st.set_page_config(page_title="Travel Itinerary Planner Chatbot", page_icon=":airplane:")
@@ -179,3 +183,4 @@ if st.session_state["places"]:
             st.markdown(f"**Answer:** {response['answer']}")
         else:
             st.warning("Please click 'Show Top Places' first to initialize the retriever.")
+ 
